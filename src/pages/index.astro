@@ -1,14 +1,23 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Avatar from '../components/Avatar.astro';
-import Socials from '../components/Socials.astro';
+import Layout from "../layouts/Layout.astro";
+import Avatar from "../components/Avatar.astro";
+import Socials from "../components/Socials.astro";
 ---
 
-<Layout title="Welcome to Astro.">
-	<main class="w-screen h-screen flex items-center justify-center flex-col gap-4">
-		<Avatar href='' />
-		<h1 class="mb-2">Welcome to <span class="text-gradient">Astro</span></h1>
-		<h2 class="mt-2">To get started, open the directory <code>src/pages</code> in your project.</h2>
+<Layout title="Luca Cotti">
+	<div
+		class="w-screen h-screen flex flex-col justify-center items-center gap-4"
+	>
+		<Avatar href="" />
+
+		<h1 class="mb-2">
+			Welcome to <span class="text-gradient">Astro</span>
+		</h1>
+
+		<p class="mt-0 mb-2">
+			To get started, open the directory <code>src/pages</code> in your project.
+		</p>
+
 		<Socials />
-	</main>
+	</div>
 </Layout>

@@ -10,7 +10,7 @@
           stroke: #787171;
           stroke-dasharray: 500;
           stroke-dashoffset: 1000;
-          animation: dash 5s linear alternate infinite
+          animation: dash 8s linear alternate infinite
         }
       }
           
