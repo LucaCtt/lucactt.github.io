@@ -2,22 +2,34 @@
 import Layout from "../layouts/Layout.astro";
 import Avatar from "../components/Avatar.astro";
 import Socials from "../components/Socials.astro";
+import { Icon } from "astro-icon/components";
 ---
 
 <Layout title="Luca Cotti">
-	<div
-		class="w-screen h-screen flex flex-col justify-center items-center gap-4"
+	<header
+		class="w-screen h-screen flex flex-col justify-between items-center gap-4"
 	>
-		<Avatar href="" />
+		<div>
+			<span class="hidden">Hidden</span>
+		</div>
 
-		<h1 class="mb-2">
-			Welcome to <span class="text-gradient">Astro</span>
-		</h1>
+		<div class="flex flex-col justify-center items-center">
+			<Avatar href="/profile.jpg" />
 
-		<p class="mt-0 mb-2">
-			To get started, open the directory <code>src/pages</code> in your project.
-		</p>
+			<h1 class="mt-2 mb-2">Luca Cotti</h1>
 
-		<Socials />
-	</div>
+			<p class="mt-0 mb-2">AI Engineer & Researcher</p>
+
+			<Socials />
+		</div>
+
+		<div>
+			<a href="#main">
+				<Icon name="fa-solid:angle-down" class="text-4xl"/>
+			</a>
+		</div>
+	</header>
+	<main id="main">
+
+	</main>
 </Layout>
