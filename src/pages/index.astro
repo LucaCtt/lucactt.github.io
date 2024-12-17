@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Avatar from "../components/Avatar.astro";
 import Socials from "../components/Socials.astro";
-import { Icon } from "astro-icon/components";
 ---
 
 <Layout title="Luca Cotti">
@@ -13,20 +12,14 @@ import { Icon } from "astro-icon/components";
 			<span class="hidden">Hidden</span>
 		</div>
 
-		<div class="flex flex-col justify-center items-center">
+		<div class="flex flex-col justify-center items-center gap-4">
 			<Avatar href="/profile.jpg" />
 
 			<h1 class="mt-2 mb-2">Luca Cotti</h1>
 
-			<p class="mt-0 mb-2">AI Engineer & Researcher</p>
+			<h2 class="mt-0 mb-2">AI Engineer & Researcher</h2>
 
 			<Socials />
-		</div>
-
-		<div>
-			<a href="#main">
-				<Icon name="fa-solid:angle-down" class="text-4xl"/>
-			</a>
 		</div>
 	</header>
 	<main id="main">
