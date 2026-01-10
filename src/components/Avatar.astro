@@ -1,13 +1,10 @@
 ---
-interface Props {
-  href: string;
-}
-
-const { href } = Astro.props;
+import { Image } from 'astro:assets';
+import avatarImage from "./avatar.png";
 ---
 
 <div
   class="w-40 h-40 rounded-full bg-black flex justify-center items-center overflow-hidden"
 >
-  <img src={href} alt="Avatar" class="w-full h-full object-cover text-black" />
+  <Image src={avatarImage} priority alt="Avatar" class="w-full h-full object-cover text-black" />
 </div>
