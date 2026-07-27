@@ -5,28 +5,16 @@ import Socials from "../components/Socials.astro";
 ---
 
 <Layout title="Luca Cotti">
-	<header
-		class="w-screen h-screen flex flex-col justify-between items-center gap-4"
-	>
-		<div>
-			<span class="hidden">Hidden</span>
-		</div>
+  <header class="w-screen h-screen flex">
+    <div class="flex flex-col items-center gap-4 m-auto">
+      <Avatar />
 
-		<div class="flex flex-col justify-center items-center gap-4">
-			<Avatar />
+      <h1 class="mt-2 mb-2">Luca Cotti</h1>
 
-			<h1 class="mt-2 mb-2">Luca Cotti</h1>
+      <h2 class="mt-0 mb-2">AI Engineer & Researcher</h2>
 
-			<h2 class="mt-0 mb-2">AI Engineer & Researcher</h2>
-
-			<Socials />
-		</div>
-
-		<div>
-			<span class="hidden">Hidden</span>
-		</div>
-	</header>
-	<main id="main">
-
-	</main>
+      <Socials />
+    </div>
+  </header>
+  <main id="main"></main>
 </Layout>
