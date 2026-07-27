@@ -9,7 +9,7 @@ const { src } = Astro.props;
 ---
 
 <div
-  class="w-40 h-40 rounded-full bg-black flex justify-center items-center overflow-hidden"
+  class="avatar w-40 h-40 rounded-full bg-black flex justify-center items-center overflow-hidden cursor-pointer"
 >
   <Image
     src={src}
@@ -18,3 +18,11 @@ const { src } = Astro.props;
     class="w-full h-full object-cover text-black"
   />
 </div>
+
+<script>
+  import { makeElastic } from "../utils/elastic";
+
+  document
+    .querySelectorAll<HTMLAnchorElement>(".avatar")
+    .forEach((el) => makeElastic(el, { draggable: false, maxDrag: 16 } as any));
+</script>

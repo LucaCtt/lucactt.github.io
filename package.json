@@ -1,12 +1,14 @@
 {
   "name": "portfolio",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@iconify-json/fa-brands": "^1.1.8",
     "@iconify-json/fa-solid": "^1.1.8",
-    "@tailwindcss/typography": "^0.5.13"
+    "@tailwindcss/typography": "^0.5.13",
+    "prettier": "^3.9.6"
   }
 }

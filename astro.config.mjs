@@ -18,7 +18,10 @@ export default defineConfig({
       LINKEDIN: envField.string({ context: "client", access: "public" }),
       GITHUB: envField.string({ context: "client", access: "public" }),
       ORCID: envField.string({ context: "client", access: "public" }),
-      GOOGLE_VERIFICATION: envField.string({ context: "client", access: "public" })
-    }
-  }
+      GOOGLE_VERIFICATION: envField.string({
+        context: "client",
+        access: "public",
+      }),
+    },
+  },
 });

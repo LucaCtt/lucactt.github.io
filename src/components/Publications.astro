@@ -61,7 +61,6 @@ const initialPublications = await fetchPublications(orcid);
             }
 
             const journal = document.getElementById(`orcid-list-journal-${i}`);
-            console.log(journal);
             if (journal && pub.journal) {
                 journal.innerHTML = pub.journal;
             }
