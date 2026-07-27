@@ -9,13 +9,13 @@ const { src } = Astro.props;
 ---
 
 <div
-  class="avatar w-40 h-40 rounded-full bg-black flex justify-center items-center overflow-hidden cursor-pointer"
+  class="avatar flex h-36 w-36 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-black"
 >
   <Image
     src={src}
     priority
     alt="Avatar"
-    class="w-full h-full object-cover text-black"
+    class="h-full w-full object-cover text-black"
   />
 </div>
 

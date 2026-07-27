@@ -20,6 +20,8 @@
     "@iconify-json/fa-brands": "^1.1.8",
     "@iconify-json/fa-solid": "^1.1.8",
     "@tailwindcss/typography": "^0.5.13",
-    "prettier": "^3.9.6"
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.8.1"
   }
 }

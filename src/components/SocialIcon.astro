@@ -2,19 +2,19 @@
 import { Icon } from "astro-icon/components";
 
 interface Props {
-    icon: string;
-    href: string;
-    title?: string;
-    class?: string;
+  icon: string;
+  href: string;
+  title?: string;
+  class?: string;
 }
 
 const { icon, href, title, class: className } = Astro.props;
 ---
 
 <a
-    href={href}
-    class={`text-white no-underline inline-block ${className || ""}`}
-    draggable="false"
+  href={href}
+  class={`text-white no-underline inline-block ${className || ""}`}
+  draggable="false"
 >
-    <Icon name={icon} title={title} class="text-4xl" />
+  <Icon name={icon} title={title} class="text-4xl" />
 </a>

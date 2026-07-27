@@ -2,89 +2,101 @@
 import { fetchPublications } from "../utils/publications";
 
 interface Props {
-    orcid: string;
+  orcid: string;
+  userEmail?: string | null;
 }
 
-const { orcid } = Astro.props;
-const initialPublications = await fetchPublications(orcid);
+const { orcid, userEmail } = Astro.props;
+const initialPublications = await fetchPublications(orcid, userEmail);
 ---
 
-<publications-list data-orcid={orcid}>
-    {
-        initialPublications.length !== 0 && (
-            <ul class="p-0 list-none">
-                {initialPublications.map((pub, index) => (
-                    <li class="mb-1">
-                        <a
-                            href={pub.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            id={`orcid-list-link-${index}`}
-                        >
-                            {pub.title}
-                        </a>
-                        {pub.journal && (
-                            <span class="italic opacity-80">{" — "}</span>
-                            <span class="italic opacity-80" id={`orcid-list-journal-${index}`}>
-                                {pub.journal}
-                            </span>
-                        )}
-                        {pub.year && (
-                            <span class="italic opacity-80">{" "}</span>
-                            <span class="opacity-60" id={`orcid-list-year-${index}`}>
-                                ({pub.year})
-                            </span>
-                        )}
-                    </li>
-                ))}
-            </ul>
-        )
-    }
+<publications-list data-orcid={orcid} data-user-email={userEmail}>
+  {
+    initialPublications.length !== 0 && (
+      <ul class="p-0">
+        {initialPublications.map((pub, index) => (
+          <li class="mb-1">
+            <a
+              href={pub.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              id={`orcid-list-link-${index}`}
+              class="no-underline hover:underline"
+            >
+              {pub.title}
+            </a>
+            {pub.journal && (
+              <>
+                <span class="italic opacity-80">{" — "}</span>
+                <span
+                  class="italic opacity-80"
+                  id={`orcid-list-journal-${index}`}
+                >
+                  {pub.journal}
+                </span>
+              </>
+            )}
+            {pub.year && (
+              <>
+                <span class="italic opacity-80"> </span>
+                <span class="opacity-60" id={`orcid-list-year-${index}`}>
+                  ({pub.year})
+                </span>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    )
+  }
 </publications-list>
 
 <script>
-    import { fetchPublications } from "../utils/publications";
+  import { fetchPublications } from "../utils/publications";
 
-    async function updatePublications(orcid: string) {
-        const topWorks = await fetchPublications(orcid);
-        if (topWorks.length === 0) {
-            return;
-        }
-
-        for (let i = 0; i < topWorks.length; i++) {
-            const pub = topWorks[i];
-
-            const link = document.getElementById(`orcid-list-link-${i}`);
-            if (link) {
-                link.innerHTML = pub.title;
-                link.setAttribute("href", pub.url);
-            }
-
-            const journal = document.getElementById(`orcid-list-journal-${i}`);
-            if (journal && pub.journal) {
-                journal.innerHTML = pub.journal;
-            }
-
-            const year = document.getElementById(`orcid-list-year-${i}`);
-            if (year && pub.year) {
-                year.innerHTML = `(${pub.year})`;
-            }
-        }
+  async function updatePublications(
+    orcid: string,
+    userEmail: string | null = null,
+  ) {
+    const topWorks = await fetchPublications(orcid, userEmail);
+    if (topWorks.length === 0) {
+      return;
     }
 
-    class PublicationsList extends HTMLElement {
-        constructor() {
-            super();
-        }
+    for (let i = 0; i < topWorks.length; i++) {
+      const pub = topWorks[i];
 
-        connectedCallback() {
-            const orcid = this.dataset.orcid;
-            if (orcid) {
-                updatePublications(orcid);
-            }
-        }
-    } 
+      const link = document.getElementById(`orcid-list-link-${i}`);
+      if (link) {
+        link.innerHTML = pub.title;
+        link.setAttribute("href", pub.url);
+      }
 
-    customElements.define("publications-list", PublicationsList);
+      const journal = document.getElementById(`orcid-list-journal-${i}`);
+      if (journal && pub.journal) {
+        journal.innerHTML = pub.journal;
+      }
 
+      const year = document.getElementById(`orcid-list-year-${i}`);
+      if (year && pub.year) {
+        year.innerHTML = `(${pub.year})`;
+      }
+    }
+  }
+
+  class PublicationsList extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      const orcid = this.dataset.orcid;
+      const userEmail = this.dataset.userEmail;
+      if (orcid) {
+        updatePublications(orcid, userEmail);
+      }
+    }
+  }
+
+  customElements.define("publications-list", PublicationsList);
 </script>

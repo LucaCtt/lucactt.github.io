@@ -1,4 +1,4 @@
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField, fontProviders } from "astro/config";
 import icon from "astro-icon";
 
 import tailwindcss from "@tailwindcss/vite";
@@ -11,6 +11,14 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: "Courier Prime",
+      cssVariable: "--font-courier-prime",
+    },
+  ],
 
   env: {
     schema: {

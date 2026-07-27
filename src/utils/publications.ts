@@ -7,25 +7,16 @@ export interface Work {
   url: string;
 }
 
-const cleanTitle = (str: string) => {
-  const cleaned = str
-    .trim()
-    .replace(
-      /\w\S*/g,
-      (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
-    );
-
-  if (cleaned.toLowerCase() === "arxiv") {
-    return "arXiv";
-  }
-
-  return cleaned;
-};
-
-async function getFullJournalTitle(doi: string): Promise<string | null> {
-  const res = await fetch(`https://api.crossref.org/works/${doi}`, {
-    headers: { Accept: "application/json" },
-  });
+async function getFullJournalTitle(
+  doi: string,
+  userEmail: string | null = null,
+): Promise<string | null> {
+  const res = await fetch(
+    `https://api.crossref.org/works/${doi}?${userEmail ? `mailto=${userEmail}` : ""}`,
+    {
+      headers: { Accept: "application/json" },
+    },
+  );
   if (!res.ok) {
     return null;
   }
@@ -53,7 +44,10 @@ export const safeCompare = (a: string, b: string): boolean => {
   return normalize(a) === normalize(b);
 };
 
-export async function fetchPublications(orcidId: string): Promise<Work[]> {
+export async function fetchPublications(
+  orcidId: string,
+  userEmail: string | null = null,
+): Promise<Work[]> {
   const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/works`, {
     headers: { Accept: "application/json" },
   });
@@ -71,9 +65,9 @@ export async function fetchPublications(orcidId: string): Promise<Work[]> {
     data.group.slice(0, 10).map(async (group: any) => {
       const summary = group["work-summary"][0];
 
-      const rawTitle = summary.title?.title?.value ?? null;
-      const rawJournal = summary["journal-title"]?.value ?? null;
-      if (!rawTitle || !rawJournal) {
+      const title = summary.title?.title?.value?.trim() ?? null;
+      const rawJournal = summary["journal-title"]?.value?.trim() ?? null;
+      if (!title || !rawJournal) {
         return null;
       }
 
@@ -81,18 +75,21 @@ export async function fetchPublications(orcidId: string): Promise<Work[]> {
         summary["external-ids"]?.["external-id"]?.find(
           (id: any) => id["external-id-type"] === "doi",
         )?.["external-id-value"] ?? null;
+      const isArxiv =
+        rawJournal.toLowerCase() === "arxiv" ||
+        (doi && doi.startsWith("10.48550/arXiv"));
 
-      let crossrefJournal = rawJournal;
-      if (doi) {
-        const fullJournalTitle = await getFullJournalTitle(doi);
+      let crossrefJournal = isArxiv ? "arXiv" : rawJournal;
+      if (doi && !isArxiv) {
+        const fullJournalTitle = await getFullJournalTitle(doi, userEmail);
         if (fullJournalTitle) {
           crossrefJournal = fullJournalTitle;
         }
       }
 
       return {
-        title: cleanTitle(rawTitle),
-        journal: cleanTitle(crossrefJournal),
+        title: title,
+        journal: crossrefJournal,
         year: summary["publication-date"]?.year?.value ?? null,
         type: summary.type,
         doi,
@@ -111,6 +108,6 @@ export async function fetchPublications(orcidId: string): Promise<Work[]> {
           !safeCompare(c.journal || "", "arxiv") ||
           self.filter((w) => safeCompare(w.title, c.title)).length === 1,
       )
-      ?.slice(0, 5) ?? []
+      ?.slice(0, 4) ?? []
   );
 }

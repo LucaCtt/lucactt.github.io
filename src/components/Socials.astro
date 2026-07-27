@@ -2,46 +2,46 @@
 import SocialIcon from "./SocialIcon.astro";
 
 interface Props {
-    email: string;
-    linkedin: string;
-    github: string;
-    orcid: string;
+  email: string;
+  linkedin: string;
+  github: string;
+  orcid: string;
 }
 
 const { email, linkedin, github, orcid } = Astro.props;
 ---
 
-<div class="social-icons flex justify-around w-full gap-4">
-    <SocialIcon
-        icon="fa-solid:envelope"
-        href={`mailto:${email}`}
-        title="Email"
-        class="elastic"
-    />
-    <SocialIcon
-        icon="fa-brands:linkedin"
-        href={`https://www.linkedin.com/in/${linkedin}`}
-        title="LinkedIn"
-        class="elastic"
-    />
-    <SocialIcon
-        icon="fa-brands:github"
-        href={`https://github.com/${github}`}
-        title="GitHub"
-        class="elastic"
-    />
-    <SocialIcon
-        icon="fa-brands:orcid"
-        href={`https://orcid.org/${orcid}`}
-        title="ORCID"
-        class="elastic"
-    />
+<div class="social-icons flex w-full justify-between gap-4">
+  <SocialIcon
+    icon="fa-solid:envelope"
+    href={`mailto:${email}`}
+    title="Email"
+    class="elastic"
+  />
+  <SocialIcon
+    icon="fa-brands:linkedin"
+    href={`https://www.linkedin.com/in/${linkedin}`}
+    title="LinkedIn"
+    class="elastic"
+  />
+  <SocialIcon
+    icon="fa-brands:github"
+    href={`https://github.com/${github}`}
+    title="GitHub"
+    class="elastic"
+  />
+  <SocialIcon
+    icon="fa-brands:orcid"
+    href={`https://orcid.org/${orcid}`}
+    title="ORCID"
+    class="elastic"
+  />
 </div>
 
 <script>
-    import { makeElastic } from "../utils/elastic";
+  import { makeElastic } from "../utils/elastic";
 
-    document
-        .querySelectorAll<HTMLAnchorElement>(".social-icons a.elastic")
-        .forEach((el) => makeElastic(el, { draggable: false, maxDrag: 16 } as any));
+  document
+    .querySelectorAll<HTMLAnchorElement>(".social-icons a.elastic")
+    .forEach((el) => makeElastic(el, { draggable: false, maxDrag: 16 } as any));
 </script>

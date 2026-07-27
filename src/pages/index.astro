@@ -16,15 +16,12 @@ import avatarImage from "../assets/avatar.png";
 ---
 
 <Layout title="Luca Cotti" googleVerification={GOOGLE_VERIFICATION}>
-  <main
-    id="main"
-    class="w-screen flex flex-col items-center justify-center-safe py-16 px-6"
-  >
-    <section class="flex flex-col items-center gap-6">
+  <main id="main" class="flex flex-col items-center justify-center-safe">
+    <section class="flex flex-col items-center gap-4">
       <div class="flex flex-col items-center gap-2">
         <Avatar src={avatarImage} />
         <h1 class="mt-2 mb-2">Luca Cotti</h1>
-        <span class="text-xl mt-0 mb-2">AI Engineer & Researcher</span>
+        <span class="mt-0 mb-2 text-lg">AI Engineer & Researcher</span>
       </div>
 
       <Socials
@@ -37,7 +34,7 @@ import avatarImage from "../assets/avatar.png";
 
     <section>
       <h2>Recent Publications</h2>
-      <Publications orcid={ORCID}/>
+      <Publications orcid={ORCID} userEmail={EMAIL} />
     </section>
   </main>
 </Layout>

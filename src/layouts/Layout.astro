@@ -2,6 +2,7 @@
 import { getImage } from "astro:assets";
 import "../styles/global.css";
 import topographySvg from "../assets/topography.svg";
+import { Font } from "astro:assets";
 
 interface Props {
   title: string;
@@ -13,11 +14,7 @@ const bgImage = await getImage({ src: topographySvg });
 ---
 
 <!doctype html>
-<html
-  lang="en"
-  class="bg-slate-950 bg-auto"
-  style={`background-image: url('${bgImage.src}');`}
->
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -29,8 +26,12 @@ const bgImage = await getImage({ src: topographySvg });
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <meta name="google-site-verification" content={googleVerification} />
     <title>{title}</title>
+    <Font cssVariable="--font-courier-prime" />
   </head>
-  <body class="prose prose-invert">
+  <body
+    class="prose prose-invert mx-auto bg-stone-950 bg-auto px-6 py-16 text-stone-50 selection:bg-stone-600 md:container"
+    style={`background-image: url('${bgImage.src}');`}
+  >
     <slot />
   </body>
 </html>
