@@ -17,11 +17,20 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v7
       - name: Install, build, and upload your site
         uses: withastro/action@v6
+        env:
+          EMAIL: ${{ vars.EMAIL }}
+          LINKEDIN: ${{ vars.LINKEDIN }}
+          GITHUB: ${{ vars.GITHUB }}
+          ORCID: ${{ vars.ORCID }}
+          GOOGLE_VERIFICATION: ${{ vars.GOOGLE_VERIFICATION }}
 
   deploy:
     needs: build
@@ -33,3 +42,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        env:
+          EMAIL: ${{ vars.EMAIL }}
+          LINKEDIN: ${{ vars.LINKEDIN }}
+          GITHUB: ${{ vars.GITHUB }}
+          ORCID: ${{ vars.ORCID }}
+          GOOGLE_VERIFICATION: ${{ vars.GOOGLE_VERIFICATION }}
