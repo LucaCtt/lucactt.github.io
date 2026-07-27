@@ -2,19 +2,24 @@
 import Layout from "../layouts/Layout.astro";
 import Avatar from "../components/Avatar.astro";
 import Socials from "../components/Socials.astro";
+import Publications from "../components/Publications.astro";
 ---
 
 <Layout title="Luca Cotti">
-  <header class="w-screen h-screen flex">
-    <div class="flex flex-col items-center gap-4 m-auto">
-      <Avatar />
-
-      <h1 class="mt-2 mb-2">Luca Cotti</h1>
-
-      <h2 class="mt-0 mb-2">AI Engineer & Researcher</h2>
+  <main id="main" class="w-screen flex flex-col items-center justify-center-safe py-16 px-6">
+    <section class="flex flex-col items-center gap-6">
+      <div class="flex flex-col items-center gap-2">
+        <Avatar />
+        <h1 class="mt-2 mb-2">Luca Cotti</h1>
+        <span class="text-xl mt-0 mb-2">AI Engineer & Researcher</span>
+      </div>
 
       <Socials />
-    </div>
-  </header>
-  <main id="main"></main>
+    </section>
+
+    <section>
+      <h2>Recent Publications</h2>
+      <Publications />
+    </section>
+  </main>
 </Layout>

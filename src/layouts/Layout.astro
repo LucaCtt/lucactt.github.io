@@ -1,16 +1,18 @@
 ---
+import { getImage } from "astro:assets";
 import "../styles/global.css";
-import TopographySvg from "./topography.svg";
+import topographySvg from "./topography.svg";
 
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+const bgImage = await getImage({ src: topographySvg });
 ---
 
 <!doctype html>
-<html lang="en" class="bg-slate-950">
+<html lang="en" class="bg-slate-950 bg-auto" style={`background-image: url('${bgImage.src}');`}>
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -28,7 +30,6 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="prose prose-invert">
-    <TopographySvg class="fixed inset-0 -z-1 pointer-events-none" />
     <slot />
   </body>
 </html>
