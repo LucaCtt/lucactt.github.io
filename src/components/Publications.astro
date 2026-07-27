@@ -1,64 +1,14 @@
 ---
-interface Work {
-    title: string;
-    authors: string | null;
-    journal: string | null;
-    year: string | null;
-    type: string;
-    doi: string | null;
-    url: string;
-}
+import { fetchPublications } from "../utils/publications";
 
-const ORCID_ID = "0009-0004-6351-556X";
-
-async function getPublications(): Promise<Work[]> {
-    const res = await fetch(`https://pub.orcid.org/v3.0/${ORCID_ID}/works`, {
-        headers: { Accept: "application/json" },
-    });
-
-    if (!res.ok) {
-        console.error(`ORCID API error: ${res.status}`);
-        return [];
-    }
-
-    const data = await res.json();
-
-    const works: Work[] = data.group.map((group: any) => {
-        // each group can have multiple summaries (different sources for the same work),
-        // prefer the one with the most complete data
-        const summary = group["work-summary"][0];
-
-        const doi =
-            summary["external-ids"]?.["external-id"]?.find(
-                (id: any) => id["external-id-type"] === "doi",
-            )?.["external-id-value"] ?? null;
-
-        return {
-            title: summary.title?.title?.value ?? "Untitled",
-            journal: summary["journal-title"]?.value ?? null,
-            year: summary["publication-date"]?.year?.value ?? null,
-            type: summary.type,
-            doi,
-            url: doi
-                ? `https://doi.org/${doi}`
-                : (summary.url?.value ?? `https://orcid.org/${ORCID_ID}`),
-        };
-    });
-
-    // sort by year, most recent first
-    return works
-        .sort((a, b) => (b.year ?? "0").localeCompare(a.year ?? "0"))
-        .slice(0, 5); // return only the 5 most recent publications
-}
-
-const publications = await getPublications();
+const initialPublications = await fetchPublications();
 ---
 
 <>
-    {publications.length === 0 && <p>No publications found.</p>}
-    <ul class="p-0 list-none">
+    {initialPublications.length === 0 && <p>No publications found.</p>}
+    <ul id="orcid-list" class="p-0 list-none">
         {
-            publications.map((pub) => (
+            initialPublications.map((pub) => (
                 <li class="mb-1">
                     <a href={pub.url} target="_blank" rel="noopener noreferrer">
                         {pub.title}
@@ -72,3 +22,34 @@ const publications = await getPublications();
         }
     </ul>
 </>
+
+<script>
+    import { fetchPublications } from "../utils/publications";
+
+    async function updatePublications() {
+        const topWorks = await fetchPublications();
+        if (topWorks.length === 0) return;
+
+        const list = document.getElementById("orcid-list");
+        const emptyMsg = document.getElementById("orcid-empty");
+
+        if (emptyMsg) emptyMsg.remove();
+        if (!list) return;
+
+        list.innerHTML = topWorks
+            .map(
+                (pub) => `
+        <li class="mb-1">
+          <a href="${pub.url}" target="_blank" rel="noopener noreferrer">
+            ${pub.title}
+          </a>
+          ${pub.journal ? `<span class="italic opacity-80"> — ${pub.journal}</span>` : ""}
+          ${pub.year ? `<span class="opacity-60"> (${pub.year})</span>` : ""}
+        </li>
+      `,
+            )
+            .join("");
+    }
+
+    updatePublications();
+</script>
