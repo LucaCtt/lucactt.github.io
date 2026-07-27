@@ -43,5 +43,5 @@ const { email, linkedin, github, orcid } = Astro.props;
 
     document
         .querySelectorAll<HTMLAnchorElement>(".social-icons a.elastic")
-        .forEach((el) => makeElastic(el, { draggable: false } as any));
+        .forEach((el) => makeElastic(el, { draggable: false, maxDrag: 16 } as any));
 </script>

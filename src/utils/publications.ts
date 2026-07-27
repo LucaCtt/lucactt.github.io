@@ -8,12 +8,18 @@ export interface Work {
 }
 
 const cleanTitle = (str: string) => {
-  return str
+  const cleaned = str
     .trim()
     .replace(
       /\w\S*/g,
       (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
     );
+
+  if (cleaned.toLowerCase() === "arxiv") {
+    return "arXiv";
+  }
+
+  return cleaned;
 };
 
 async function getFullJournalTitle(doi: string): Promise<string | null> {
@@ -71,16 +77,13 @@ export async function fetchPublications(orcidId: string): Promise<Work[]> {
         return null;
       }
 
-      const isArxiv = rawJournal?.toLowerCase().includes("arxiv");
       const doi =
         summary["external-ids"]?.["external-id"]?.find(
           (id: any) => id["external-id-type"] === "doi",
         )?.["external-id-value"] ?? null;
 
       let crossrefJournal = rawJournal;
-      if (isArxiv) {
-        crossrefJournal = "arXiv";
-      } else if (doi) {
+      if (doi) {
         const fullJournalTitle = await getFullJournalTitle(doi);
         if (fullJournalTitle) {
           crossrefJournal = fullJournalTitle;
