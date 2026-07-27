@@ -7,18 +7,45 @@ export interface Work {
     url: string;
 }
 
-export const ORCID_ID = "0009-0004-6351-556X";
+const cleanTitle = (str: string) => {
+    return str.trim().replace(
+        /\w\S*/g,
+        text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+    );
+};
 
-export async function fetchPublications(): Promise<Work[]> {
-    const res = await fetch(`https://pub.orcid.org/v3.0/${ORCID_ID}/works`, {
+export const safeCompare = (a: string, b: string): boolean => {
+    const normalize = (str: string): string =>
+        str
+            // Decompose Unicode characters (e.g., "é" -> "e" + accent mark)
+            .normalize("NFD")
+            // Remove diacritical marks/accents
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            // Replace all Unicode dash variations with a standard space
+            .replace(/[\p{Pd}]+/gu, " ")
+            // Remove remaining non-alphanumeric characters (keep numbers and letters)
+            .replace(/[^\p{L}\p{N}\s]/gu, "")
+            // Collapse whitespace and trim
+            .replace(/\s+/g, " ")
+            .trim();
+
+    return normalize(a) === normalize(b);
+};
+
+export async function fetchPublications(orcidId: string): Promise<Work[]> {
+    const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/works`, {
         headers: { Accept: "application/json" },
     });
 
-    if (!res.ok) return [];
+    if (!res.ok) {
+        return [];
+    }
 
     const data = await res.json();
-
-    if (!data.group || !Array.isArray(data.group)) return [];
+    if (!data.group || !Array.isArray(data.group)) {
+        return [];
+    }
 
     const works: Work[] = data.group.map((group: any) => {
         const summary = group["work-summary"][0];
@@ -28,16 +55,19 @@ export async function fetchPublications(): Promise<Work[]> {
             )?.["external-id-value"] ?? null;
 
         return {
-            title: summary.title?.title?.value ?? "Untitled",
-            journal: summary["journal-title"]?.value ?? null,
+            title: cleanTitle(summary.title?.title?.value ?? "Untitled"),
+            journal: cleanTitle(summary["journal-title"]?.value ?? ""),
             year: summary["publication-date"]?.year?.value ?? null,
             type: summary.type,
             doi,
             url: doi
                 ? `https://doi.org/${doi}`
-                : (summary.url?.value ?? `https://orcid.org/${ORCID_ID}`),
+                : (summary.url?.value ?? `https://orcid.org/${orcidId}`),
         };
     });
 
-    return works?.sort((a, b) => (b.year ?? "0")?.localeCompare(a.year ?? "0"))?.slice(0, 5) ?? [];
+    return works
+        ?.sort((a, b) => (b.year ?? "0")?.localeCompare(a.year ?? "0"))
+        ?.filter((c, _, self) => !safeCompare(c.journal || "", "arxiv") || self.filter((w) => safeCompare(w.title, c.title)).length === 1)
+        ?.slice(0, 5) ?? [];
 }

@@ -5,14 +5,19 @@ import topographySvg from "../assets/topography.svg";
 
 interface Props {
   title: string;
+  googleVerification: string;
 }
 
-const { title } = Astro.props;
+const { title, googleVerification } = Astro.props;
 const bgImage = await getImage({ src: topographySvg });
 ---
 
 <!doctype html>
-<html lang="en" class="bg-slate-950 bg-auto" style={`background-image: url('${bgImage.src}');`}>
+<html
+  lang="en"
+  class="bg-slate-950 bg-auto"
+  style={`background-image: url('${bgImage.src}');`}
+>
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -22,11 +27,7 @@ const bgImage = await getImage({ src: topographySvg });
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <meta
-      name="google-site-verification"
-      content="oyUs-ZV7IvOLLpzJUk56pSc-YRcgAJYaHbXdNyAl7co"
-    />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="google-site-verification" content={googleVerification} />
     <title>{title}</title>
   </head>
   <body class="prose prose-invert">

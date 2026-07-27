@@ -1,26 +1,35 @@
 ---
 import SocialIcon from "./SocialIcon.astro";
+
+interface Props {
+    email: string;
+    linkedin: string;
+    github: string;
+    orcid: string;
+}
+
+const { email, linkedin, github, orcid } = Astro.props;
 ---
 
 <div class="flex justify-around w-full gap-4">
     <SocialIcon
         icon="fa-solid:envelope"
-        href="mailto:luca.cotti98@gmail.com"
+        href={`mailto:${email}`}
         title="Email"
     />
     <SocialIcon
         icon="fa-brands:linkedin"
-        href="https://www.linkedin.com/in/luca-cotti/"
+        href={`https://www.linkedin.com/in/${linkedin}`}
         title="LinkedIn"
     />
     <SocialIcon
         icon="fa-brands:github"
-        href="https://github.com/LucaCtt"
+        href={`https://github.com/${github}`}
         title="GitHub"
     />
     <SocialIcon
         icon="fa-brands:orcid"
-        href="https://orcid.org/0009-0004-6351-556X"
+        href={`https://orcid.org/${orcid}`}
         title="ORCID"
     />
 </div>

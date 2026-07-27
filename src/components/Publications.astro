@@ -1,55 +1,91 @@
 ---
 import { fetchPublications } from "../utils/publications";
 
-const initialPublications = await fetchPublications();
+interface Props {
+    orcid: string;
+}
+
+const { orcid } = Astro.props;
+const initialPublications = await fetchPublications(orcid);
 ---
 
-<>
-    {initialPublications.length === 0 && <p>No publications found.</p>}
-    <ul id="orcid-list" class="p-0 list-none">
-        {
-            initialPublications.map((pub) => (
-                <li class="mb-1">
-                    <a href={pub.url} target="_blank" rel="noopener noreferrer">
-                        {pub.title}
-                    </a>
-                    {pub.journal && (
-                        <span class="italic opacity-80"> — {pub.journal}</span>
-                    )}
-                    {pub.year && <span class="opacity-60"> ({pub.year})</span>}
-                </li>
-            ))
-        }
-    </ul>
-</>
+<publications-list data-orcid={orcid}>
+    {
+        initialPublications.length !== 0 && (
+            <ul class="p-0 list-none">
+                {initialPublications.map((pub, index) => (
+                    <li class="mb-1">
+                        <a
+                            href={pub.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            id={`orcid-list-link-${index}`}
+                        >
+                            {pub.title}
+                        </a>
+                        {pub.journal && (
+                            <span class="italic opacity-80">{" — "}</span>
+                            <span class="italic opacity-80" id={`orcid-list-journal-${index}`}>
+                                {pub.journal}
+                            </span>
+                        )}
+                        {pub.year && (
+                            <span class="italic opacity-80">{" "}</span>
+                            <span class="opacity-60" id={`orcid-list-year-${index}`}>
+                                ({pub.year})
+                            </span>
+                        )}
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+</publications-list>
 
 <script>
     import { fetchPublications } from "../utils/publications";
 
-    async function updatePublications() {
-        const topWorks = await fetchPublications();
-        if (topWorks.length === 0) return;
+    async function updatePublications(orcid: string) {
+        const topWorks = await fetchPublications(orcid);
+        if (topWorks.length === 0) {
+            return;
+        }
 
-        const list = document.getElementById("orcid-list");
-        const emptyMsg = document.getElementById("orcid-empty");
+        for (let i = 0; i < topWorks.length; i++) {
+            const pub = topWorks[i];
 
-        if (emptyMsg) emptyMsg.remove();
-        if (!list) return;
+            const link = document.getElementById(`orcid-list-link-${i}`);
+            if (link) {
+                link.innerHTML = pub.title;
+                link.setAttribute("href", pub.url);
+            }
 
-        list.innerHTML = topWorks
-            .map(
-                (pub) => `
-        <li class="mb-1">
-          <a href="${pub.url}" target="_blank" rel="noopener noreferrer">
-            ${pub.title}
-          </a>
-          ${pub.journal ? `<span class="italic opacity-80"> — ${pub.journal}</span>` : ""}
-          ${pub.year ? `<span class="opacity-60"> (${pub.year})</span>` : ""}
-        </li>
-      `,
-            )
-            .join("");
+            const journal = document.getElementById(`orcid-list-journal-${i}`);
+            console.log(journal);
+            if (journal && pub.journal) {
+                journal.innerHTML = pub.journal;
+            }
+
+            const year = document.getElementById(`orcid-list-year-${i}`);
+            if (year && pub.year) {
+                year.innerHTML = `(${pub.year})`;
+            }
+        }
     }
 
-    updatePublications();
+    class PublicationsList extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            const orcid = this.dataset.orcid;
+            if (orcid) {
+                updatePublications(orcid);
+            }
+        }
+    } 
+
+    customElements.define("publications-list", PublicationsList);
+
 </script>

@@ -1,25 +1,43 @@
 ---
+import {
+  GOOGLE_VERIFICATION,
+  EMAIL,
+  LINKEDIN,
+  GITHUB,
+  ORCID,
+} from "astro:env/client";
+
 import Layout from "../layouts/Layout.astro";
 import Avatar from "../components/Avatar.astro";
 import Socials from "../components/Socials.astro";
 import Publications from "../components/Publications.astro";
+
+import avatarImage from "../assets/avatar.png";
 ---
 
-<Layout title="Luca Cotti">
-  <main id="main" class="w-screen flex flex-col items-center justify-center-safe py-16 px-6">
+<Layout title="Luca Cotti" googleVerification={GOOGLE_VERIFICATION}>
+  <main
+    id="main"
+    class="w-screen flex flex-col items-center justify-center-safe py-16 px-6"
+  >
     <section class="flex flex-col items-center gap-6">
       <div class="flex flex-col items-center gap-2">
-        <Avatar />
+        <Avatar src={avatarImage} />
         <h1 class="mt-2 mb-2">Luca Cotti</h1>
         <span class="text-xl mt-0 mb-2">AI Engineer & Researcher</span>
       </div>
 
-      <Socials />
+      <Socials
+        email={EMAIL}
+        linkedin={LINKEDIN}
+        github={GITHUB}
+        orcid={ORCID}
+      />
     </section>
 
     <section>
       <h2>Recent Publications</h2>
-      <Publications />
+      <Publications orcid={ORCID}/>
     </section>
   </main>
 </Layout>
