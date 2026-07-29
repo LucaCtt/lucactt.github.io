@@ -13,7 +13,7 @@ const initialPublications = await fetchPublications(orcid, userEmail);
 <publications-list data-orcid={orcid} data-user-email={userEmail}>
   {
     initialPublications.length !== 0 && (
-      <ul class="p-0">
+      <ul class="p-0 list-none">
         {initialPublications.map((pub, index) => (
           <li class="mb-1">
             <a

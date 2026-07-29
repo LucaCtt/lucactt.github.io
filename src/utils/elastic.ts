@@ -75,6 +75,10 @@ export function makeElastic(
   };
 
   const onPointerDown = (e: PointerEvent) => {
+    if (e.pointerType !== "mouse") {
+      return;
+    }
+
     dragging = true;
     moved = false;
     originX = e.clientX - x;
@@ -84,7 +88,10 @@ export function makeElastic(
   };
 
   const onPointerMove = (e: PointerEvent) => {
-    if (!dragging) return;
+    if (!dragging) {
+      return;
+    }
+
     const rawX = e.clientX - originX;
     const rawY = e.clientY - originY;
     if (Math.abs(rawX) > clickThreshold || Math.abs(rawY) > clickThreshold) {
@@ -96,7 +103,10 @@ export function makeElastic(
   };
 
   const onPointerEnd = (e: PointerEvent) => {
-    if (!dragging) return;
+    if (!dragging) {
+      return;
+    }
+
     dragging = false;
     el.releasePointerCapture(e.pointerId);
     vx = 0;
